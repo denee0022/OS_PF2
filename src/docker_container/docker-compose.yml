@@ -1,0 +1,22 @@
+services:
+  server:
+    build:
+      context: ./server  # Server Dockerfile befindet sich im server-Verzeichnis
+    networks:
+      - mynetwork
+    ports:
+      - "12345:12345"  # Server wird auf Port 12345 zugänglich gemacht
+
+  client:
+    build:
+      context: ./client  # Client Dockerfile befindet sich im client-Verzeichnis
+    networks:
+      - mynetwork
+    depends_on:
+      - server  # Der Client wartet, bis der Server verfügbar ist
+    volumes:
+      - ./client_output:/app/output  # Mountet das Host-Verzeichnis ./client_output auf /app/output im Container
+
+networks:
+  mynetwork:
+    driver: bridge  # Definiere ein benutzerdefiniertes Netzwerk
